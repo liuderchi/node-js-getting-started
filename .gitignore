@@ -1,3 +1,10 @@
+# Node-RED
+.node-red/**/*.config.nodes.json
+.node-red/**/*.config.runtime.json
+.node-red/**/*.config.users.json
+.node-red/**/*.json.backup
+.node-red/**/.sessions.json
+
 # Node build artifacts
 node_modules
 npm-debug.log
