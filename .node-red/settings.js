@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 /**
  * This is the default settings file provided by Node-RED.
  *
@@ -237,6 +239,7 @@ module.exports = {
   // can be accessed in a function block as:
   //    global.get("os")
   functionGlobalContext: {
+    env: process.env,
     // os:require('os'),
     // jfive:require("johnny-five"),
     // j5board:require("johnny-five").Board({repl:false})
