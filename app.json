@@ -3,10 +3,6 @@
   "description": "linebot app using Node-RED",
   "repository": "https://github.com/liuderchi/node-js-getting-started",
   "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/main/public/node.svg",
-  "keywords": [
-    "node",
-    "node-red",
-    "heroku"
-  ],
+  "keywords": ["node", "node-red", "heroku"],
   "image": "heroku/nodejs"
 }

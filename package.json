@@ -6,10 +6,29 @@
     "node": "14.x"
   },
   "scripts": {
-    "start": "node-red --userDir ./.node-red"
+    "start": "node-red --userDir ./.node-red",
+    "prettier": "prettier --write '.node-red/**/{*.json,*.js}' *.json"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    ".node-red/**/*.js": [
+      "npm run prettier"
+    ],
+    "*.json": [
+      "npm run prettier"
+    ]
   },
   "dependencies": {
     "node-red": "^1.2.7"
+  },
+  "devDependencies": {
+    "husky": "^4.3.8",
+    "lint-staged": "^10.5.3",
+    "prettier": "^2.2.1"
   },
   "repository": {
     "type": "git",
