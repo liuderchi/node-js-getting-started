@@ -4,6 +4,7 @@
 .node-red/**/*.config.users.json
 .node-red/**/*.json.backup
 .node-red/**/.sessions.json
+.node-red/**/flows_cred.json
 
 # Node build artifacts
 node_modules

@@ -21,10 +21,33 @@
     "payloadType": "date",
     "x": 290,
     "y": 120,
-    "wires": [["eb861a35.a32198"]]
+    "wires": [["768310ed.f5454"]]
   },
   {
-    "id": "eb861a35.a32198",
+    "id": "768310ed.f5454",
+    "type": "change",
+    "z": "22527ece.451d52",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "payload",
+        "pt": "msg",
+        "to": "${CHANNEL_ACCESS_TOKEN}",
+        "tot": "str"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 480,
+    "y": 120,
+    "wires": [["4b63743f.d5a9ac"]]
+  },
+  {
+    "id": "4b63743f.d5a9ac",
     "type": "debug",
     "z": "22527ece.451d52",
     "name": "",
@@ -35,8 +58,8 @@
     "complete": "false",
     "statusVal": "",
     "statusType": "auto",
-    "x": 560,
-    "y": 140,
+    "x": 690,
+    "y": 120,
     "wires": []
   }
 ]
