@@ -43,7 +43,7 @@
     "id": "ca1c4d8d.e58b4",
     "type": "change",
     "z": "e267ff5a.3bfd6",
-    "name": "",
+    "name": "set from env",
     "rules": [
       {
         "t": "set",
@@ -58,8 +58,25 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 500,
+    "x": 490,
     "y": 100,
-    "wires": [["30bca562.bada7a"]]
+    "wires": [["30bca562.bada7a", "582d9a6f.86c0c4"]]
+  },
+  {
+    "id": "582d9a6f.86c0c4",
+    "type": "debug",
+    "z": "e267ff5a.3bfd6",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 710,
+    "y": 160,
+    "wires": []
   }
 ]
