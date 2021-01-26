@@ -1,6 +1,7 @@
 # Node-RED
 .node-red/**/*.json.backup
 .node-red/**/*.sessions.json
+.node-red/**/.config.nodes.json
 
 # Node build artifacts
 node_modules
