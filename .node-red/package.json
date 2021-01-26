@@ -2,5 +2,10 @@
   "name": "node-red-project",
   "description": "A Node-RED Project",
   "version": "0.0.1",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "node-red-contrib-viseo-google-authentication": "~0.1.1",
+    "node-red-contrib-viseo-google-spreadsheet": "~0.5.1",
+    "node-red-dashboard": "~2.27.0"
+  }
 }
