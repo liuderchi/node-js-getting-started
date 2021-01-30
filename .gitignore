@@ -3,8 +3,9 @@
 .node-red/**/*.config.runtime.json
 .node-red/**/*.config.users.json
 .node-red/**/*_cred.json
-.node-red/**/*.json.backup
 .node-red/**/.sessions.json
+.node-red/**/*.tmp
+.node-red/**/*.backup
 
 # Node build artifacts
 node_modules
