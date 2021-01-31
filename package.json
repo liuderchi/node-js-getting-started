@@ -24,7 +24,10 @@
   },
   "dependencies": {
     "dotenv": "^8.2.0",
-    "node-red": "^1.2.7"
+    "node-red": "^1.2.7",
+    "node-red-contrib-viseo-google-authentication": "^0.1.1",
+    "node-red-contrib-viseo-google-spreadsheet": "^0.5.1",
+    "node-red-dashboard": "^2.27.0"
   },
   "devDependencies": {
     "husky": "^4.3.8",
