@@ -1,19 +1,5 @@
 [
   {
-    "id": "db6cd1ae.428cb",
-    "type": "tab",
-    "label": "Flow 1",
-    "disabled": false,
-    "info": ""
-  },
-  {
-    "id": "d1e2f615.767668",
-    "type": "tab",
-    "label": "line msg",
-    "disabled": false,
-    "info": ""
-  },
-  {
     "id": "d3290d59.f097d",
     "type": "subflow",
     "name": "health check",
@@ -54,15 +40,6 @@
         }
       ]
     }
-  },
-  {
-    "id": "e00f909a.a408c",
-    "type": "google-service-account",
-    "name": "derek-all-access",
-    "scope": ["https://www.googleapis.com/auth/spreadsheets"],
-    "way": "json",
-    "check_dialogflow": "",
-    "check_speech": ""
   },
   {
     "id": "941711d7.c5afe",
@@ -202,6 +179,13 @@
     "wires": [["f1f964df.5fbc38"], ["f1f964df.5fbc38"]]
   },
   {
+    "id": "d1e2f615.767668",
+    "type": "tab",
+    "label": "line msg",
+    "disabled": false,
+    "info": ""
+  },
+  {
     "id": "315fc6f9.b0f5ea",
     "type": "http in",
     "z": "d1e2f615.767668",
@@ -259,7 +243,7 @@
     "type": "function",
     "z": "d1e2f615.767668",
     "name": "set payload",
-    "func": "const event = msg.payload.events[0];\n\nconst replyToken = event.replyToken;\nlet message = event.message.type === 'text' \n  ? {type: 'text', text: event.message.text.toUpperCase()}\n  : event.message\n  \n// search from shopInfo\nconst shouldReplyShopInfo = global\n  .get('shopInfo')\n  .forEach(entry => {\n      const match = entry\n        .keywords\n        .split(',')\n        .some(w => w === event.message.text)\n      // update message if match\n      if (match) {\n        if (entry.type === 'location') {\n          const {type, text: address, title, latitude, longitude} = entry\n          message = {type, title, address, latitude, longitude}\n        } else {\n          message = {type: entry.type, text: entry.text}\n        }\n      }\n  })\n  \n\nmsg.payload = JSON.stringify({\n  replyToken,\n  messages: [message]\n})\n\nreturn msg;",
+    "func": "const event = msg.payload.events[0];\n\nconst replyToken = event.replyToken;\nlet message = event.message.type === 'text' \n  ? {type: 'text', text: \"抱歉,沒找到\"}\n  : event.message\n  \nconst genProductBubble = (product) => {\n  return {\n    type: 'bubble',\n    hero: {\n      type: 'image',\n      size: 'full',\n      aspectRatio: '20:13',\n      aspectMode: 'cover',\n      url: product.image,\n    },\n    body: {\n      type: 'box',\n      layout: 'vertical',\n      spacing: 'sm',\n      contents: [\n        {\n          type: 'text',\n          text: product.title,\n          wrap: true,\n          weight: 'bold',\n          size: 'xl',\n        },\n        {\n          type: 'box',\n          layout: 'baseline',\n          contents: [\n            {\n              type: 'text',\n              text: '$' + product.price,\n              wrap: true,\n              weight: 'bold',\n              size: 'xl',\n              flex: 0,\n            },\n          ],\n        },\n        {\n          type: 'text',\n          text: product.description,\n        },\n      ],\n    },\n    footer: {\n      type: 'box',\n      layout: 'vertical',\n      spacing: 'sm',\n      contents: [\n        {\n          type: 'button',\n          style: 'primary',\n          action: {\n            type: 'uri',\n            label: '去逛逛',\n            uri: 'https://linecorp.com',\n          },\n        },\n      ],\n    },\n  };\n};\n  \n// search from shopInfo\nglobal\n  .get('shopInfo')\n  .forEach(entry => {\n      const match = entry\n        .keywords\n        .split(',')\n        .some(w => w === event.message.text)\n      // update message if match\n      if (match) {\n        if (entry.type === 'location') {\n          const {type, text: address, title, latitude, longitude} = entry\n          message = {type, title, address, latitude, longitude}\n        } else {\n          message = {type: entry.type, text: entry.text}\n        }\n      }\n  })\n  \n// search from products\nglobal\n  .get('products')\n  .forEach(entry => {\n      const match = entry\n        .keywords\n        .split(',')\n        .some(w => w === event.message.text)\n      // update message if match\n      if (match) {\n        // reply flex message \n        if(message.altText === \"Product Search Result\" &&\n          message.contents &&\n          Array.isArray(message.contents.contents)\n        ) {\n          message.contents.contents.push(genProductBubble(entry))\n        } else {\n          message = {\n            type: 'flex', \n            altText: \"Product Search Result\",\n            contents: {\n              type: 'carousel',\n              contents: [\n                genProductBubble(entry)\n              ], \n            }\n          }\n        }\n        \n      }\n  })\n\nmsg.payload = JSON.stringify({\n  replyToken,\n  messages: [message]\n})\n\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",
@@ -344,7 +328,7 @@
     "payloadType": "date",
     "x": 160,
     "y": 120,
-    "wires": [["7150bcb8.bd9ba4", "188113ef.d3ccbc"]]
+    "wires": [["7150bcb8.bd9ba4", "188113ef.d3ccbc", "79d81a87.ced904"]]
   },
   {
     "id": "43a7d001.c696c",
@@ -379,8 +363,8 @@
         "t": "set",
         "p": "channelAccessToken",
         "pt": "global",
-        "to": "CHANNEL_ACCESS_TOKEN",
-        "tot": "env"
+        "to": "",
+        "tot": "str"
       }
     ],
     "action": "",
@@ -388,8 +372,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 380,
-    "y": 120,
+    "x": 400,
+    "y": 80,
     "wires": [[]]
   },
   {
@@ -430,7 +414,7 @@
     "id": "188113ef.d3ccbc",
     "type": "google-spreadsheet",
     "z": "d1e2f615.767668",
-    "name": "read from accounts",
+    "name": "get shopInfo",
     "auth": "e00f909a.a408c",
     "sheet": "17yl5bdgyyj8X3axp06wPDwIMbixQ4OryiSpEg5Av8mE",
     "range": "shopInfo!A:G",
@@ -441,59 +425,22 @@
     "line": false,
     "column": true,
     "fields": "all",
-    "save": "_sheet",
+    "save": "_sheet_shopInfo",
     "selfields": [""],
     "cell_l": "",
     "cell_c": "",
     "input": "payload",
-    "output": "payload",
+    "output": "shopInfo",
     "saveType": "global",
     "inputType": "msg",
-    "outputType": "msg",
+    "outputType": "global",
     "sheetType": "str",
     "rangeType": "str",
     "cell_lType": "str",
     "cell_cType": "str",
     "x": 390,
-    "y": 160,
-    "wires": [["45782811.451a88"], []]
-  },
-  {
-    "id": "87efa2c9.70f3f",
-    "type": "function",
-    "z": "d1e2f615.767668",
-    "name": "",
-    "func": "const shopInfo = {}\n\nmsg.payload.forEach(row => {\n    const {name, ...otherProps} = row\n    shopInfo[name] = otherProps\n})\n\nglobal.set('shopInfo', shopInfo)\n\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "x": 600,
-    "y": 100,
-    "wires": [[]]
-  },
-  {
-    "id": "45782811.451a88",
-    "type": "change",
-    "z": "d1e2f615.767668",
-    "name": "set shopInfo",
-    "rules": [
-      {
-        "t": "set",
-        "p": "shopInfo",
-        "pt": "global",
-        "to": "payload",
-        "tot": "msg"
-      }
-    ],
-    "action": "",
-    "property": "",
-    "from": "",
-    "to": "",
-    "reg": false,
-    "x": 610,
-    "y": 160,
-    "wires": [[]]
+    "y": 120,
+    "wires": [[], []]
   },
   {
     "id": "bdacc5f1.64ca08",
@@ -517,7 +464,7 @@
     "payload": "",
     "payloadType": "date",
     "x": 120,
-    "y": 700,
+    "y": 880,
     "wires": [["af7e69ce.446f88"]]
   },
   {
@@ -527,7 +474,7 @@
     "name": "",
     "env": [],
     "x": 290,
-    "y": 700,
+    "y": 880,
     "wires": [["32b6ba41.9587b6"]]
   },
   {
@@ -543,7 +490,7 @@
     "statusVal": "",
     "statusType": "auto",
     "x": 470,
-    "y": 700,
+    "y": 880,
     "wires": []
   },
   {
@@ -553,7 +500,48 @@
     "name": "self ping",
     "info": "",
     "x": 100,
-    "y": 640,
+    "y": 820,
     "wires": []
+  },
+  {
+    "id": "79d81a87.ced904",
+    "type": "google-spreadsheet",
+    "z": "d1e2f615.767668",
+    "name": "get products",
+    "auth": "e00f909a.a408c",
+    "sheet": "17yl5bdgyyj8X3axp06wPDwIMbixQ4OryiSpEg5Av8mE",
+    "range": "products!A:F",
+    "method": "append",
+    "direction": "line",
+    "action": "get",
+    "clear": false,
+    "line": false,
+    "column": true,
+    "fields": "all",
+    "save": "_sheet_products",
+    "selfields": [""],
+    "cell_l": "",
+    "cell_c": "",
+    "input": "payload",
+    "output": "products",
+    "saveType": "global",
+    "inputType": "msg",
+    "outputType": "global",
+    "sheetType": "str",
+    "rangeType": "str",
+    "cell_lType": "str",
+    "cell_cType": "str",
+    "x": 390,
+    "y": 180,
+    "wires": [[], []]
+  },
+  {
+    "id": "e00f909a.a408c",
+    "type": "google-service-account",
+    "name": "derek-all-access",
+    "scope": ["https://www.googleapis.com/auth/spreadsheets"],
+    "way": "json",
+    "check_dialogflow": "",
+    "check_speech": ""
   }
 ]
